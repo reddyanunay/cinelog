@@ -1,0 +1,26 @@
+I noticed these are the issues
+
+1.On application start, we are go to a logged in session, I can see logout button on opening the website
+2.Failed to load lists and Create list (route not found), Also the log movie section should have feature to add them to a list that is there in our profile.
+3.Feed and discover should not be on the home navigation, but on the page similar to the Trending now section(as a tab). Lists can be on the Navigation bar
+4.Pagination should be more easily navigatable(instead of just next and previous)
+5.Also how did you implement the feed feature?(Like what is the logic behind it), because when i open the feed page, its asking me to log movies first. The feed based on our logged movies is good, but when there are no logged movies, we should show the feed then as well right. The main purpose of the feed is to discover movies(one by one) like how people watch reels on Instagram,(infinite scroll)
+6.A watchlist option along with log movie,Maybe more options like, watchlist, log, rate etc for any movie(Create a watchlist option in the log movie section, consider the watchlist as a default or one of the lists(feature)), so the log movie section should have add to watchlist, and add to a custom list option.
+
+
+1. There is no proper application logic other than the trending section, like
+    - No profile section to see the movies we logged
+    - A watchlist option along with log movie,Maybe more options like, watchlist, log, rate etc for any movie
+
+2.Separate sections, Trending now is fine, but there should be another section with just list of movies(maybe random or maybe filtered), This should have filter options based on ratings, release year, budget, revenue, etc more other things(we will add them later when we get idea)
+3.The trending section should also contain pagination so more movies can be listed, same with separate sections for point 2
+4.The feed, Like a reel section of Instagram but with movie image or video(if its available from the tmdb) with their description, and infinite scroll(we can add a recommendation algorithm later on)
+5.Lists feature, just like playlists from music apps, where people can add movies in separate lists based on their wish, maybe genres, their liking etc anything.(later we can even make it collaborative)
+
+
+
+Have to remove the basic alerts when added to watchlist or added to a custom list.
+When clicked watchlist, pop up says added to watchlist, but the lists section doesn't show the watchlist as a list.
+In the lists section creating a list is working, but viewing a particular list is not working
+The feed is not how i imagined, we need to have a infinite scroll of movies one by one like a recommendation or to show what a movie is about, people can scroll and if it catches their interest they can log it(add it to watchlist or give rating if seen already etc)(this is what makes this project a bit unique to other ones)
+Upon save log, movie is not being logged, its throwing some error in the alert "failed to save log"

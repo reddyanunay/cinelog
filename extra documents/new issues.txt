@@ -1,0 +1,5 @@
+There are some more issues that I found
+
+1. The action buttons on the feed section is not properly integrated.
+2. The details page of the movie should contain even more information about it, it seems more vague now, also add the trailer link somewhere in this page(First let me know what exactly we can get about a movie from the tmdb)
+3. The log movie modal is also not very promising( when we add a movie to watchlist or a list, or do any other operation, this should not restrict us not to close the modal, we can do any of the action irrespective of the other, unless rating means watched)

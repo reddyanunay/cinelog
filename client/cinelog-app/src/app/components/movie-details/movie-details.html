@@ -1,0 +1,181 @@
+<div class="min-h-screen bg-gray-900">
+  <!-- Header with Backdrop -->
+  <div
+    *ngIf="movieDetails"
+    class="relative h-96 overflow-hidden"
+    [style.backgroundImage]="'url(' + getBackdropUrl() + ')'"
+    [style.backgroundSize]="'cover'"
+    [style.backgroundPosition]="'center'"
+  >
+    <!-- Overlay -->
+    <div class="absolute inset-0 bg-gradient-to-b from-transparent to-gray-900"></div>
+
+    <!-- Back Button -->
+    <button
+      (click)="goBack()"
+      class="absolute top-4 left-4 bg-gray-800 hover:bg-gray-700 text-white px-4 py-2 rounded-lg transition z-10"
+    >
+      ← Back
+    </button>
+  </div>
+
+  <!-- Main Content -->
+  <div class="max-w-6xl mx-auto px-4 -mt-32 relative z-20 pb-8">
+    <!-- Loading State -->
+    <div *ngIf="isLoading" class="flex justify-center py-12">
+      <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-white"></div>
+    </div>
+
+    <!-- Error State -->
+    <div *ngIf="errorMessage && !isLoading" class="bg-red-500 bg-opacity-20 border border-red-500 text-red-300 px-6 py-3 rounded-lg">
+      {{ errorMessage }}
+    </div>
+
+    <!-- Movie Details -->
+    <div *ngIf="movieDetails && !isLoading" class="grid grid-cols-1 md:grid-cols-3 gap-8">
+      <!-- Poster & Actions (Sidebar) -->
+      <div class="md:col-span-1">
+        <img
+          [src]="getPosterUrl()"
+          [alt]="movieDetails.title"
+          class="w-full rounded-lg shadow-2xl mb-4"
+        />
+
+        <div class="flex gap-2">
+          <button
+            (click)="onLogMovie()"
+            class="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-lg transition flex items-center justify-center gap-2"
+          >
+            📝 Log Movie
+          </button>
+        </div>
+
+        <!-- Quick Info -->
+        <div class="mt-6 bg-gray-800 rounded-lg p-4 space-y-3">
+          <div>
+            <p class="text-gray-400 text-sm">Release Date</p>
+            <p class="text-white font-semibold">{{ movieDetails.release_date | date: 'MMM dd, yyyy' }}</p>
+          </div>
+          <div>
+            <p class="text-gray-400 text-sm">Rating</p>
+            <div class="flex items-center gap-1">
+              <span class="text-yellow-400">⭐</span>
+              <span class="text-white font-semibold">{{ (movieDetails.vote_average / 2).toFixed(1) }}/5</span>
+            </div>
+          </div>
+          <div *ngIf="movieDetails.runtime">
+            <p class="text-gray-400 text-sm">Runtime</p>
+            <p class="text-white font-semibold">{{ movieDetails.runtime }} minutes</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Main Info -->
+      <div class="md:col-span-2">
+        <!-- Title -->
+        <h1 class="text-4xl md:text-5xl font-bold text-white mb-2">{{ movieDetails.title }}</h1>
+
+        <!-- Tagline -->
+        <p *ngIf="movieDetails.tagline" class="text-gray-400 italic mb-4">{{ movieDetails.tagline }}</p>
+
+        <!-- Genres -->
+        <div *ngIf="movieDetails.genres && movieDetails.genres.length > 0" class="flex flex-wrap gap-2 mb-6">
+          <span
+            *ngFor="let genre of movieDetails.genres"
+            class="bg-gray-800 text-gray-300 px-3 py-1 rounded-full text-sm"
+          >
+            {{ genre.name }}
+          </span>
+        </div>
+
+        <!-- Overview -->
+        <div class="mb-6">
+          <h2 class="text-2xl font-bold text-white mb-3">Overview</h2>
+          <p class="text-gray-300 leading-relaxed">{{ movieDetails.overview }}</p>
+        </div>
+
+        <!-- Trailer -->
+        <div *ngIf="trailerKey" class="mb-6">
+          <h2 class="text-2xl font-bold text-white mb-3">Trailer</h2>
+          <div class="aspect-video rounded-lg overflow-hidden shadow-xl">
+            <iframe
+              [src]="getYouTubeEmbedUrl(trailerKey) | sanitizeUrl"
+              class="w-full h-full"
+              frameborder="0"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowfullscreen
+            ></iframe>
+          </div>
+        </div>
+
+        <!-- Director & Writers -->
+        <div class="mb-6">
+          <h2 class="text-2xl font-bold text-white mb-3">Crew</h2>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div *ngIf="director" class="bg-gray-800 rounded-lg p-4">
+              <p class="text-gray-400 text-sm mb-1">Director</p>
+              <p class="text-white font-semibold">{{ director }}</p>
+            </div>
+            <div *ngIf="writers.length > 0" class="bg-gray-800 rounded-lg p-4">
+              <p class="text-gray-400 text-sm mb-1">Writers</p>
+              <p class="text-white font-semibold">{{ writers.join(', ') }}</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Cast -->
+        <div *ngIf="cast.length > 0" class="mb-6">
+          <h2 class="text-2xl font-bold text-white mb-3">Top Cast</h2>
+          <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4">
+            <div *ngFor="let actor of cast" class="text-center">
+              <img
+                [src]="getProfileImageUrl(actor.profile_path)"
+                [alt]="actor.name"
+                class="w-full rounded-lg mb-2 shadow-lg"
+              />
+              <p class="text-white text-sm font-semibold">{{ actor.name }}</p>
+              <p class="text-gray-400 text-xs">{{ actor.character }}</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Budget & Revenue -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+          <div *ngIf="movieDetails.budget && movieDetails.budget > 0" class="bg-gray-800 rounded-lg p-4">
+            <p class="text-gray-400 text-sm">Budget</p>
+            <p class="text-white font-semibold">{{ movieDetails.budget | currency }}</p>
+          </div>
+          <div *ngIf="movieDetails.revenue && movieDetails.revenue > 0" class="bg-gray-800 rounded-lg p-4">
+            <p class="text-gray-400 text-sm">Revenue</p>
+            <p class="text-white font-semibold">{{ movieDetails.revenue | currency }}</p>
+          </div>
+        </div>
+
+        <!-- Additional Info -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div class="bg-gray-800 rounded-lg p-4">
+            <p class="text-gray-400 text-sm">Status</p>
+            <p class="text-white font-semibold">{{ movieDetails.status }}</p>
+          </div>
+          <div *ngIf="movieDetails.runtime" class="bg-gray-800 rounded-lg p-4">
+            <p class="text-gray-400 text-sm">Original Language</p>
+            <p class="text-white font-semibold uppercase">{{ movieDetails.original_language || 'N/A' }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Review Modal -->
+  <app-review-modal
+    [isOpen]="showReviewModal"
+    [movieTitle]="movieDetails?.title || ''"
+    [tmdbId]="movieDetails?.id || 0"
+    [posterPath]="movieDetails?.poster_path || ''"
+    (submitted)="onReviewSubmitted($event)"
+    (addedToWatchlist)="onMovieAddedToWatchlist($event)"
+    (addedToList)="onMovieAddedToList($event)"
+    (cancelled)="onReviewCancelled()"
+  ></app-review-modal>
+</div>
+

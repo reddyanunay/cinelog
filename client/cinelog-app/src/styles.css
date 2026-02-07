@@ -1,0 +1,75 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  @apply bg-gray-900 text-white;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+}
+
+/* Hide scrollbar for feed but keep functionality */
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+/* Smooth scroll snap */
+.snap-y {
+  scroll-snap-type: y mandatory;
+  scroll-behavior: smooth;
+}
+
+.snap-start {
+  scroll-snap-align: start;
+}
+
+/* Line clamp utilities */
+.line-clamp-3 {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Feed split screen responsive adjustments */
+@media (max-width: 768px) {
+  .feed-split-screen {
+    flex-direction: column !important;
+  }
+  
+  .feed-left,
+  .feed-right {
+    width: 100% !important;
+    height: 50% !important;
+  }
+}
+
+/* Custom scrollbar for feed right panel */
+.feed-right::-webkit-scrollbar {
+  width: 6px;
+}
+
+.feed-right::-webkit-scrollbar-track {
+  background: #1f2937;
+}
+
+.feed-right::-webkit-scrollbar-thumb {
+  background: #4b5563;
+  border-radius: 3px;
+}
+
+.feed-right::-webkit-scrollbar-thumb:hover {
+  background: #6b7280;
+}
