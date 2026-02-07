@@ -412,7 +412,6 @@ This project is developed for educational purposes.
 ## 🙏 Acknowledgments
 
 - **TMDB API** for comprehensive movie data
-- **Angular Team** for the excellent framework
 - **MongoDB** for flexible database solution
 - **Tailwind CSS** for rapid UI development
 
